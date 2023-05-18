@@ -1,0 +1,7 @@
+pictures/
+server/config/
+node_modules/
+example/
+console/
+bots/
+client/libs

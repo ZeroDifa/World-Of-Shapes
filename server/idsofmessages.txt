@@ -1,0 +1,18 @@
+1: спавн клиента
+2: добавление игрока
+3: удаление
+4: reposition
+5: SpellProcess
+6: globalCooldown
+7: spell
+8: cooldown
+9: breakProcessing
+10: reHp
+11: reMp
+12: Effect start
+13: Effect stop (future)
+14: combat status
+15: stop combat status
+16: reEnergy
+17: deleteObject
+18: relevel

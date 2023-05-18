@@ -1,0 +1,85 @@
+body {
+    background-color: #000000f0;
+    height: auto;
+    width: auto;
+    margin: 0px;
+}
+#canvas {
+    /*border: 3px solid white;*/
+    background-color: #000000f0;
+    margin: 0px;
+    /* background-color: transparent; */
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#myCords {
+    position: absolute;
+    bottom: 0;
+    font-size: 20px;
+    color: white;
+    margin:10px;
+    background-color: #3d3b3b73;
+
+}
+#fps-counter {
+    right: 0;
+    bottom: 0;
+    color: navajowhite;
+    background-color: #3d3b3b73;
+    /*background-color: transparent;*/
+    position: absolute;
+    margin: 10px
+}
+#gameMenu {
+    bottom: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    padding: 0 30px 0 30px;
+    position: absolute;
+    width: 30%;
+    height: auto;
+    background-color: #bf4930c4;
+    border-radius: 10px;
+    transform: scale(1.2);
+}
+#nickInput {
+    margin-bottom: 20px;
+    padding: 0;
+    height: 30px;
+    cursor: pointer;
+    width: 100%;
+    background: #F6F6f6;
+    border-radius: 8px;
+    border: 1px solid #cecece;
+
+}
+#nickInput:focus {
+    outline: none;
+    padding-left: 20px;
+    width: 90%;
+    font-size: 20px;
+    border-color: red;
+
+}
+#playBtn {
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 20px;
+    height: 30px;
+    cursor: pointer;
+    width: 100%;
+    background-color: #FF2C00;
+    border: 0px;
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+}
