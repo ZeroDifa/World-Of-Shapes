@@ -273,6 +273,7 @@ let SpellsInfo = {
 			this.id = this.GameServer.getUniqueIdentifier()
 			this.radius = 8;
 			this.speed = 50;
+			this.isLife = true;
 			this.target = {
 				x: this.owner.x + 1700*Math.cos(this.owner.angle),
 				y: this.owner.y + 1700*Math.sin(this.owner.angle)
@@ -321,6 +322,7 @@ let SpellsInfo = {
 			}
 	    },
 		close: function() {
+			this.isLife = false;
 			this.sendDelete()
 			this.GameServer.freeIDS.push(this.id)
 		}
@@ -337,6 +339,7 @@ let SpellsInfo = {
 		},
 		init: function() {
 			// return
+			this.isLife = true;
 			this.id = this.GameServer.getUniqueIdentifier()
 			this.radius = 8;
 			this.speed = 30;
@@ -406,6 +409,7 @@ let SpellsInfo = {
 	    },
 		close: function() {
 			// return
+			this.isLife = false;
 			this.sendDelete()
 			this.GameServer.freeIDS.push(this.id)
 		}

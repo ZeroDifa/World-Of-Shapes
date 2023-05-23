@@ -29,7 +29,7 @@ class Hunter extends Entity {
         this.lastTargetChange = performance.now();
         for (let obj of this.GameServer.objects) {
             if (!this.isOnViewPort(obj) || this.isInvisibility || obj.isInvisibility || 
-                obj.type == 'spell' || this.spell != null || this.processingSpell || 
+                obj.type == 'spell' || obj.type == 'mob' || this.spell != null || this.processingSpell || 
                 this.CheckSpell('global') || obj == this || new Vector2(this, obj).distance < 300) continue
             this.target = obj;
             this.aim.p = obj;

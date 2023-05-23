@@ -41,6 +41,7 @@ class Player extends Entity {
         let w = new Writer().uint8(4);
         for (let id in this.objectsInVision) {
             let t = this.objectsInVision[id]
+            // if (t.type == 'spell' && t.spell_id == 4) continue
             if (t.type != 'spell' && !t.isLife || (t.isInvisibility && t.id != this.id)) continue
             arr.push(t)
         }

@@ -1,6 +1,6 @@
 global.l = console.log;
 global.lg = new require('./logger.js').Logger;
-global.performance = performance;
+global.performance = require('perf_hooks').performance;
 global.Vector2 = require('./Vector2.js').Vector2;
 global.Entity = require('./Entity.js').Entity;
 global.Mobs = require('./Mobs.js').Mobs;

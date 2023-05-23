@@ -108,19 +108,16 @@ function onloadImage() {
 
 async function getImgs() {
     let response = await fetch(location.href + 'api/getimglist', {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + localStorage.token
-    }});
+        method: 'GET'});
     let json = await response.json();
     if (json['error'] == "Invalid Token") {
         
-        window.location.href = "/signin.html"
+        window.location.href = "/signin"
     }
     totalload = json['img_list'].length + json['b_list'].length
     json['img_list'].forEach(element => {
         let i = new Image();
-        i.src = `images/spells/${element.name}`;
+        i.src = `static/images/spells/${element.name}`;
         i.onload = onloadImage;
         ImageCache[element.name] = i;
         totalsize += element.filesize;
@@ -129,7 +126,7 @@ async function getImgs() {
     });
     json['b_list'].forEach(element => {
         let i = new Image();
-        i.src = `images/bonuses/${element.name}`;
+        i.src = `static/images/bonuses/${element.name}`;
         i.onload = onloadImage;
         ImageCache[element.name] = i;
         totalsize += element.filesize;
@@ -181,7 +178,7 @@ function onmessage(event) {
                     UpdatableObjects = data.updatableObjects
                     isRadialView = data.isR;
                     OriginPoints = [];
-                    for (let i = 0; i < (mp_h*mp_w)/10000; i++) OriginPoints.push(new Point())
+                    for (let i = 0; i < (mp_h*mp_w)/15000; i++) OriginPoints.push(new Point())
                     break
                 case 'target_me':
                     break
@@ -370,7 +367,7 @@ canvas.onmousedown = function (event) {
         }))
     }
 }
-let zoom = 0.2, size = 0, max_scale = 0.9;
+let zoom = 0.2, size = 0, max_scale = 0.8;
 
 function unitScale() {
     return Math.max(h / 1080, w / 1920) * zoom;
@@ -515,6 +512,10 @@ function rnd(arr) {
     arr[1] = Math.floor(arr[1]);
     return Math.floor(Math.random() * (arr[1] - arr[0])) + arr[0];
 }
+function delFromArray(array, element) {
+    let i = array.indexOf(element);
+    if (i !== -1) {array.splice(i, 1)}
+}
 let anglex = 0, angley = 0;
 function drawBorders(ctx) {
     draw_circle(0, 0, 1, 'white')
@@ -645,7 +646,7 @@ class Vanish {
     move() {
         this.alpha -= this.step
         if (this.alpha < 0 || performance.now()-this.dateCreate > 10000) {
-            Objects.splice(Objects.indexOf(this), 1);
+            delFromArray(Objects, this)
             this.hit();
             return;
         }
@@ -688,7 +689,7 @@ class PushNotify {
     move() {
         if (performance.now()-this.dateCreate > this.duration) {
             PushNotify.notifyCount--;
-            Objects.splice(Objects.indexOf(this), 1);
+            delFromArray(Objects, this);
             new Vanish(this, 0.07, () => {
                 for (let i in notifys) {
                     let el = notifys[i];

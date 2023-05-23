@@ -6,12 +6,6 @@ class GameServer {
         this.nameServer = nameServer;
         this.server = this;
         this.webSocketServer = new WebSocket.Server({port: port}).on('connection', (ws, req) => {
-            // let token = req.headers.authorization;
-            // if (!token) {
-            //     ws.send(JSON.stringify({ error: 'Unauthorized' }));
-            //     ws.close();
-            //     return;
-            // }
             new Player(ws, this, req.headers['x-forwarded-for'])
             l(this.onl)
         })
@@ -19,8 +13,8 @@ class GameServer {
         this.port = port;
         this.clients = {};
         this.objects = [];
-        this.w = 3000;
-        this.h = 3000;
+        this.w = 3500;
+        this.h = 3500;
         this.OIDS = 0;
         this.px = 500
         this.freeIDS = [];
@@ -31,8 +25,8 @@ class GameServer {
             x: 300, y: 300,
             size: 200
         }
-        // for (let i = 0; i < 30; i++) new Mage(this);
-        // for (let i = 0; i < 30; i++) new Hunter(this);
+        // for (let i = 0; i < 8; i++) new Mage(this);
+        for (let i = 0; i < 18; i++) new Hunter(this);
     }
     getUniqueIdentifier() {
         let id = this.freeIDS.length == 0 ? this.OIDS++ : this.freeIDS.pop();
@@ -81,8 +75,10 @@ class GameServer {
         for (let id in client.objectsInVision) {
             let c = client.objectsInVision[id]
             if (c.type == 'spell') {
-                if (![4, 5].includes(c.spell_id)) continue
-                l('yes')
+                if (![4, 5].includes(c.spell_id)) {
+                    l("not this spells")
+                    continue
+                }
                 if (!client.isOnViewPort(c)) {
                     client.sendMessage(new Writer().uint8(17).uint16(c.id));
                     delete client.objectsInVision[c.id];
@@ -98,6 +94,7 @@ class GameServer {
         rem.uint8(3);
         for (let obj of this.objects) {
             if (obj.type == 'spell') {
+                
                 continue
             }
             if (client.isOnViewPort(obj) && !obj.isInvisibility) {

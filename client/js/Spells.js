@@ -25,11 +25,13 @@ class Spell {
 window.SpellsInfo = {
 	1: {
 	    init: function() {
+			l(this)
 	    	let vector = new Vector2(this.owner, this.target);
 	    	let _ = ((this.owner.radius)*100)/ vector.distance / 100;
 	    	this.x = this.owner.x + (vector.dx * _);
 	    	this.y = this.owner.y + (vector.dy * _);
 			this.vector = new Vector2({x: this.x,y: this.y}, {x: this.xto, y: this.yto})
+			l(this.vector)
 			this.fire = new Fire(15, 30, this, 1, 0, 150, 255, 5, false, function () {
 	    		this.particles.push({
 	    			x: this.owner.x + rnd([-this.range, this.range]), 
@@ -62,16 +64,26 @@ window.SpellsInfo = {
 			this.xto = this.x
 			this.yto = this.y
 			this.id = data.uint16()
+			this.vector = new Vector2({x: this.x,y: this.y}, {x: NaN, y: NaN})
+			this.fire = new Fire(10, 300, this, 1, 100, 250, 255, 5, false);
+			this.fire2 = new Fire(10, 300, this, 1, 100, 250, 255, 5, false);
 			POV[this.id] = this;
 	    },
     	update: function () {
 			this.x += (this.xto - this.x)*0.2
 			this.y += (this.yto - this.y)*0.2
+			if (new Vector2(this, {x: this.xto, y: this.yto}).distance < 0.1 && performance.now()-this.dateCreate > 1000) {
+				this.fire.destroy()
+				this.fire2.destroy()
+    			this.hit()
+			}
     	},
 		draw: function() {
 			draw_circle(this.x, this.y, this.radius, 'red')
 		},
 		close: function() {
+			this.fire.destroy()
+			this.fire2.destroy()
 			delete POV[this.id]
 		}
 	},

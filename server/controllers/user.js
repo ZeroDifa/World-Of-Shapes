@@ -7,7 +7,6 @@ const User = require("../models/user.js");
 
 
 exports.register = async (req, res) => {
-    console.log(req.body)
     if ([req.body.nickname, req.body.password].includes(undefined)) {
         res.status(400).send({  "error": "Неверный формат данных" })
         return
@@ -36,6 +35,11 @@ exports.register = async (req, res) => {
     let payload = {id: result.insertedId};
 
     const token = jwt.sign(payload, config.TOKEN_SECRET, { expiresIn: '24h',});
+    res.cookie("jwt", token, {
+        expires: new Date(Date.now() + 3600000), 
+        httpOnly: true,
+        secure: true,
+    });
     res.status(200).send({ token })
 }
 
@@ -61,6 +65,12 @@ exports.login = async (req, res) => {
     let payload = {id: result._id};
 
     const token = jwt.sign(payload, config.TOKEN_SECRET, { expiresIn: '24h',});
+    res.cookie("jwt", token, {
+        expires: new Date(Date.now() + 3600000), 
+        httpOnly: true,
+        secure: true,
+    });
+    console.log(payload)
     res.status(200).send({ token })
 }
 
