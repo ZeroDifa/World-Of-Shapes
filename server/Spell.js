@@ -424,6 +424,9 @@ let SpellsInfo = {
 		calculateEnergy: function() {
 			return 50
 		},
+		calculateMp: function(owner) {
+	    	return owner.maxMp*0.2
+		},
 		init: function() {
 			new Effect(
 				function () {

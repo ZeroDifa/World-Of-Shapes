@@ -270,15 +270,48 @@
 	<div id="spells-interface" style="display: none"></div>
 	<script type="text/javascript">
 		let spells_interface = document.getElementById('spells-interface'),
-			buttons = {},
-			titles = {
-				1: 'Огненный шар',
-				2: 'Повышение скорости',
-				3: 'Лечение 6% от максимального запаса хп',
-				4: 'Пыпуск пули, наносящей урон',
-				5: 'Пуля, замедляющая противника',
-				6: 'Повышение мобильности и уход в невидимость',
-			},
+			buttons = {};
+		let spellsList = {}, spellsInfo;
+		async function setButtons() {
+			let response = await fetch('../api/spellsInfo', {
+				method: 'GET',
+			});
+			const spellsInfo = await response.json();
+
+			for (let i = 1; i <= 10; i++) {
+				let el = document.createElement("button");
+				el.innerHTML = i != 10 ? i : 0
+				el.setAttribute('class', 'spell-button');
+				el.setAttribute('style', 'background-repeat: no-repeat; background-size: cover;')
+				buttons[i != 10 ? i : 0] = {
+					element: el,
+					spell_id: null,
+					setSpell: function (id) {
+						this.spell_id = id;
+						spellsList[id] = {
+							spell_id: id,
+							button: this.element,
+							image: 'url(' + ImageCache[spellsInfo[id]['image']].src + ')'
+						}
+						this.element.id = id;
+						this.element.setAttribute('title', spellsInfo[this.spell_id]['title'])
+						this.element.style.backgroundImage = spellsList[id].image
+						this.element.style['border'] = `none`
+					}
+				}
+				spells_interface.appendChild(el);
+			}
+		}
+		setButtons()
+
+		titles = {
+			1: 'Огненный шар',
+			2: 'Повышение скорости',
+			3: 'Лечение 6% от максимального запаса хп',
+			4: 'Пыпуск пули, наносящей урон',
+			5: 'Пуля, замедляющая противника',
+			6: 'Повышение мобильности и уход в невидимость',
+		},
 			SpellsImages = {
 				1: 'fireball.png',
 				2: 'speed.png',
@@ -290,30 +323,6 @@
 			};
 
 
-		let spellsList = {}
-		for (let i = 1; i <= 10; i++) {
-			let el = document.createElement("button");
-			el.innerHTML = i != 10 ? i : 0
-			el.setAttribute('class', 'spell-button');
-			el.setAttribute('style', 'background-repeat: no-repeat; background-size: cover;')
-			buttons[i != 10 ? i : 0] = {
-				element: el,
-				spell_id: null,
-				setSpell: function (id) {
-					this.spell_id = id;
-					spellsList[id] = {
-						spell_id: id,
-						button: this.element,
-						image: 'url(' + ImageCache[SpellsImages[id]].src + ')'
-					}
-					this.element.id = id;
-					this.element.setAttribute('title', titles[this.spell_id])
-					this.element.style.backgroundImage = spellsList[id].image
-					this.element.style['border'] = `none`
-				}
-			}
-			spells_interface.appendChild(el);
-		}
 	</script>
 	<div id="longLasting"></div>
 </body>

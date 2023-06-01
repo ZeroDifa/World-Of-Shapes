@@ -20,3 +20,20 @@ exports.createFile = (directory, data = []) => {
         return false;
     }
 }
+
+exports.scanDirectory = (directoryPath) => {
+  const files = fs.readdirSync(directoryPath);
+  
+  const result = files.map(file => {
+    const filePath = path.join(directoryPath, file);
+    const stats = fs.statSync(filePath);
+    const fileSizeInBytes = stats.size;
+    const fileSizeInKB = Math.floor(fileSizeInBytes /1024);
+    return {
+      name: file,
+      filesize: fileSizeInKB
+    };
+  });
+  
+  return result;
+}

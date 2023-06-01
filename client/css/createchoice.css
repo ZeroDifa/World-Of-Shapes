@@ -1,0 +1,148 @@
+@import 'https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300';
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  flex-direction: column;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: large;
+}
+
+div[class*=box] {
+  height: auto;
+  width: 100%; 
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.buttonn {
+  line-height: 50px;
+  height: 50px;
+  text-align: center;
+  width: 80%;
+  cursor: pointer;
+  margin-top: 30px;
+  color: #FFF;
+  transition: all 0.3s;
+  position: relative;
+}
+.buttonn span {
+  transition: all 0.3s;
+}
+.buttonn::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  transition: all 0.3s;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-top-color: rgba(255,255,255,0.5);
+  border-bottom-color: rgba(255,255,255,0.5);
+  transform: scale(0.1, 1);
+}
+.buttonn:hover span {
+  letter-spacing: 2px;
+}
+.buttonn:hover::before {
+  opacity: 1; 
+  transform: scale(1, 1); 
+}
+.buttonn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: all 0.3s;
+  background-color: rgba(255,255,255,0.1);
+}
+.buttonn:hover::after {
+  opacity: 0; 
+  transform: scale(0.1, 1);
+}
+
+html, body, .container-fluid {
+    height: 100%;
+}
+body {
+    color: black;
+}
+#logo {
+    width: 80%;
+}
+.main {
+    width: 100%;
+    height: 100vh;
+    background-color: #0f0f0f; padding: 20px;
+    display: flex;
+}
+.left {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.center {
+    width: 50%;
+    display: flex;
+    align-items: center;
+}
+.right {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.spell-button {
+    display: inline-block;
+    background-color: transparent;
+    border: .2px solid gray;
+    border-radius: 15%;
+    width: 70px;
+    height: 70px;
+    margin: 0px 3px 0px 3px;
+    text-align: left;
+    color: white;
+    font-weight: bolder;
+    padding-bottom: 6%;
+}
+
+.spell-button:hover {
+    box-shadow: inset 0em 0em 20px black;
+}
+.card {
+    margin-top: 20px;
+}
+
+.input-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+}
+
+.card-body {
+    background-color: #272727;
+    color: aliceblue;
+}
+
+.card {
+    background-color: #5c5c5c;
+    opacity: 0;
+}

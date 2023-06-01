@@ -17,6 +17,20 @@ function getCookie(cookieName, headers) {
     return null;
 }
 exports.getCookie = getCookie;
+exports.authWithRedirect = (req, res, next) => {
+    const token = getCookie('jwt', req.headers);
+    if (token === null) return res.redirect('/signin');
+    try {
+        if (token === undefined || !token) return res.redirect('/signin');
+
+        let verifiedUser = jwt.verify(token, config.TOKEN_SECRET);
+        if (!verifiedUser) return res.redirect('/signin');
+        next();
+    } catch (error) {
+        return res.redirect('/signin');
+    }
+
+}
 
 exports.verifyUserToken = (req, res, next) => {
     const token = getCookie('jwt', req.headers);

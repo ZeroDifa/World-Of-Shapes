@@ -25,7 +25,7 @@ class GameServer {
             x: 300, y: 300,
             size: 200
         }
-        // for (let i = 0; i < 8; i++) new Mage(this);
+        for (let i = 0; i < 8; i++) new Mage(this);
         for (let i = 0; i < 18; i++) new Hunter(this);
     }
     getUniqueIdentifier() {

@@ -107,7 +107,7 @@ function onloadImage() {
 
 
 async function getImgs() {
-    let response = await fetch(location.href + 'api/getimglist', {
+    let response = await fetch('../api/getimglist', {
         method: 'GET'});
     let json = await response.json();
     if (json['error'] == "Invalid Token") {
@@ -494,7 +494,7 @@ function main() {
     result_fps++;
     let fut = performance.now() - now;
     DeltaTime = 1000 / 60 - fut;
-    setTimeout(main, DeltaTime)
+    requestAnimationFrame(main);
 }
 
 

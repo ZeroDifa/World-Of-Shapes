@@ -85,15 +85,12 @@ class Entity {
 				this.maxMp = this.intelligence * 10;
 				this.hp = this.maxHp;
 				this.mp = this.maxMp;
-				this.spellDamagePower = 30;
 				this.spellDamagePower += Math.floor(this.intelligence * 0.2)
 				break
 			case 2:
 				this.maxHp = this.stamina * 10;
 				this.hp = this.maxHp;
-				this.maxEnergy = 100;
 				this.energy = this.maxEnergy;
-				this.spellDamagePower = 0;
 
 				this.angle = -Math.random()*Math.PI*2;
 				this.angleTo = 0;
@@ -121,7 +118,10 @@ class Entity {
 		this.intelligence = config.basic_characteristics[this.class].intelligence;
 		this.manaRegenAtRest = config.basic_characteristics[this.class].manaRegenAtRest;
 		this.manaRegenAtCombat = config.basic_characteristics[this.class].manaRegenAtCombat;
+		this.spellDamagePower = config.basic_characteristics[this.class].spellDamagePower;;
 
+
+		this.maxEnergy = config.basic_characteristics[this.class].maxEnergy;;
 		this.energyRegen = config.basic_characteristics[this.class].energyRegen;
 		this.rotationEasing = config.basic_characteristics[this.class].rotationEasing;
 		this.initStatsByMainCharacteristics();
