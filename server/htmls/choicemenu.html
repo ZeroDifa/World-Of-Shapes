@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="center" style="flex-direction: column-reverse;">
-            <div class="buttonn" onclick="window.location.href = '/game'">
+            <div class="buttonn" id="playbutton" style="display: none;" onclick="window.location.href = '/game'">
                 <span>Играть</span>
             </div>
             <canvas id="canvas" style="width: 100%; height: 100%;"></canvas>
@@ -80,6 +80,7 @@
         </div>
     </div>
     <script src="static/js/service/choice_script.js" defer></script>
+	<script src="static/js/service/cookie.js" defer></script>
     <script src="static/js/service/buttonspells.js" defer></script>
     <script>
         let characters;
@@ -119,6 +120,9 @@
             choiceCharId = el.id;
             $('.character').removeClass('scale');
             $('#' + el.id).addClass('scale');
+            $('#playbutton').css('display', 'block');
+
+            createCookie('id', el.id, 1/24)
             
             setPlayer(characters, el.id);
             console.log($("#" + el.id));

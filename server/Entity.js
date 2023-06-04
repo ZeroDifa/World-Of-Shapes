@@ -1,4 +1,3 @@
-const config = require("./config/config")
 
 class Entity {
 	constructor(x, y, GameServer) {
@@ -93,7 +92,6 @@ class Entity {
 				this.energy = this.maxEnergy;
 
 				this.angle = -Math.random()*Math.PI*2;
-				this.angleTo = 0;
 				this.viewAngle = Math.PI/4;
 				this.rotationSpeed = (Math.PI/180)*4;
 				break
@@ -107,23 +105,23 @@ class Entity {
 		this.level = 1;
 		this.damageRate = 1;
 		this.xp = 0;
-		this.AllowSpells = config.basic_characteristics[this.class].AllowSpells;
+		this.AllowSpells = this.save.AllowSpells;
 		this.initCooldowns();
 
-		this.stamina = config.basic_characteristics[this.class].stamina;
-		this.protection = config.basic_characteristics[this.class].protection;
-		this.speed = config.basic_characteristics[this.class].speed;
-		this.radius = config.basic_characteristics[this.class].radius;
+		this.stamina = this.save.stamina;
+		this.protection = this.save.protection;
+		this.speed = this.save.speed;
+		this.radius = this.save.radius;
 
-		this.intelligence = config.basic_characteristics[this.class].intelligence;
-		this.manaRegenAtRest = config.basic_characteristics[this.class].manaRegenAtRest;
-		this.manaRegenAtCombat = config.basic_characteristics[this.class].manaRegenAtCombat;
-		this.spellDamagePower = config.basic_characteristics[this.class].spellDamagePower;;
+		this.intelligence = this.save.intelligence;
+		this.manaRegenAtRest = this.save.manaRegenAtRest;
+		this.manaRegenAtCombat = this.save.manaRegenAtCombat;
+		this.spellDamagePower = this.save.spellDamagePower;
 
 
-		this.maxEnergy = config.basic_characteristics[this.class].maxEnergy;;
-		this.energyRegen = config.basic_characteristics[this.class].energyRegen;
-		this.rotationEasing = config.basic_characteristics[this.class].rotationEasing;
+		this.maxEnergy = this.save.maxEnergy;
+		this.energyRegen = this.save.energyRegen;
+		this.rotationEasing = this.save.rotationEasing;
 		this.initStatsByMainCharacteristics();
 
 	}
@@ -279,33 +277,17 @@ class Entity {
         	this.aim.p.y += vector.dy;
 		}
         if (this.class == 2) {
-            vector = new Vector2(this, this.aim.p)
-			this.cosA = Math.acos((this.aim.p.x-this.x)/vector.distance)
-			this.sinA = Math.asin((this.aim.p.y-this.y)/vector.distance)
-            if (this.aim.p.y < this.y) this.angleTo = -Math.acos((this.aim.p.x-this.x)/vector.distance)
-            else this.angleTo = -2*Math.PI+Math.acos((this.aim.p.x-this.x)/vector.distance)
-            let AddAngle = 0
-            if (this.getQuarter(this.angle) == 4 && this.getQuarter(this.angleTo) == 1) AddAngle = -2*Math.PI;
-            else if (this.getQuarter(this.angle) == 1 && this.getQuarter(this.angleTo) == 4) AddAngle = 2*Math.PI;
-            else if (Math.abs(this.angleTo-this.angle) > Math.PI && (this.getQuarter(this.angle) == 2 && this.getQuarter(this.angleTo) == 4)) AddAngle = 2*Math.PI;
-            else if (Math.abs(this.angleTo-this.angle) > Math.PI && (this.getQuarter(this.angle) == 3 && this.getQuarter(this.angleTo) == 1)) AddAngle = -2*Math.PI;
-            else if (Math.abs(this.angleTo-this.angle) > Math.PI && (this.getQuarter(this.angle) == 4 && this.getQuarter(this.angleTo) == 2)) AddAngle = -2*Math.PI;
-            else if (Math.abs(this.angleTo-this.angle) > Math.PI && (this.getQuarter(this.angle) == 1 && this.getQuarter(this.angleTo) == 3)) AddAngle = 2*Math.PI;            
-            let deltaAngle = ((this.angleTo + AddAngle)-this.angle) > 0 ? Math.abs((this.angleTo + AddAngle)-this.angle)*this.rotationEasing : -Math.abs((this.angleTo + AddAngle)-this.angle)*this.rotationEasing
-            if (Math.abs(deltaAngle) > this.rotationSpeed) deltaAngle = this.rotationSpeed*this.getSign(deltaAngle)
-            // else if (Math.abs(deltaAngle) < this.rotationSpeed)
-            this.angle += deltaAngle
-            if (this.angle < -2*Math.PI) this.angle += 2*Math.PI;
-            if (this.angle > 0) this.angle -= 2*Math.PI;
-			
+  			let targetAngle = Math.atan2(this.aim.p.y - this.y, this.aim.p.x - this.x);
+			let angleDiff = Math.atan2(Math.sin(targetAngle - this.angle), Math.cos(targetAngle - this.angle));
+			// console.log(this.aim.p.x, this.aim.p.y, this.x, this.y);
+			let add = angleDiff*this.rotationEasing;
+			if (Math.abs(add) > this.rotationSpeed) {
+				add = this.getSign(angleDiff)*this.rotationSpeed;
+			}
+            this.angle += add;
+			if (this.angle > 2*Math.PI) this.angle -= 2*Math.PI;
+			if (this.angle < -2*Math.PI) this.angle += 2*Math.PI;
         }
-    }
-	getQuarter(angle) {
-        if (angle < 0 && angle > -Math.PI/2) return 1
-        else if (angle < -Math.PI/2 && angle > -Math.PI) return 2
-        else if (angle < -Math.PI && angle > -3*Math.PI/2) return 3
-        else if (angle < -3*Math.PI/2 && angle > -2*Math.PI) return 4
-		else return 1
     }
     getSign(a) {
         return a >= 0 ? 1 : -1

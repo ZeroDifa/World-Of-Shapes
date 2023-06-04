@@ -7,7 +7,7 @@ const User = require("../models/user.js");
 const { scanDirectory } = require('./helpers')
 const ObjectId = require('mongodb').ObjectId; 
 const { getCookie } = require('../middleware/auth.js');
-const { checkFileExists, createFile } = require("../controllers/helpers");
+const { checkFileExists, createFile, readFile } = require("../controllers/helpers");
 
 exports.register = async (req, res) => {
     if ([req.body.nickname, req.body.password].includes(undefined)) {
@@ -96,8 +96,12 @@ exports.createCharacter = async (req, res) => {
     let payload = jwt.decode(token);
     let user = await db.find('users', {_id: new ObjectId(payload.id)})
     let savePath = 'usersaves/' + payload.id + '.json';
-    if (user.length == 1 && checkFileExists(savePath)) {
-        const file = require('../' + savePath)
+    if (user.length == 1) {
+        if (!checkFileExists(savePath)) {
+            createFile(savePath, {});
+        }
+        
+        const file = JSON.parse(await readFile(savePath));
         const uniqueID = Date.now().toString(16) + Math.floor(Math.random()*10000).toString(16);
 
         file[uniqueID] = { ...config.basic_characteristics[req.body.class == 'mage' ? 1 : 2] };
@@ -128,6 +132,9 @@ exports.getCharactersList = async (req, res) => {
     const token = getCookie('jwt', req.headers);
     let payload = jwt.decode(token);
     const filePath = 'usersaves/'+ payload.id +'.json';
+    if (!checkFileExists(filePath)) {
+        return res.send('{}')
+    }
     res.sendFile(path.resolve(filePath));
 }
 

@@ -1,0 +1,27 @@
+{
+    "18886a0fb03ff5": {
+        "description": "Класс маг. Слабая живучесть, компенсируемая хорошей мобильностью и малыми габаритами. Имеет уникальную механику \"концентрация\", позволяющая подготавливать мощные атаки. ",
+        "AllowSpells": [
+            "global",
+            1,
+            2,
+            3,
+            6
+        ],
+        "stamina": 45,
+        "protection": 0.9,
+        "speed": 6,
+        "radius": 30,
+        "intelligence": 30,
+        "manaRegenAtRest": 5,
+        "manaRegenAtCombat": 1,
+        "spellDamagePower": 30,
+        "maxEnergy": 0,
+        "energyRegen": 0,
+        "rotationEasing": 0,
+        "level": 1,
+        "xp": 0,
+        "nickname": "adsdsa",
+        "class": "mage"
+    }
+}

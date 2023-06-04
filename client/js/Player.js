@@ -19,7 +19,7 @@ class Player {
 		if (this.isMainPlayer) this.xp = r.uint16();
 		// l(this.level, this.xp)
 		this.opacity = 1;
-		this.dateToRestoreOpacity = performance.now()-9999999
+		this.dateToRestoreOpacity = performance.now() - 9999999
 		switch (this.class) {
 			case 1:
 				this.maxMp = r.uint16();
@@ -67,12 +67,12 @@ class Player {
 				delete POV[this.id]
 				break;
 			case 1:
-				
+
 				if (this.isMainPlayer) {
 					let t = r.uint16();
 					this.dateToRestoreOpacity = performance.now() + t
 					this.opacity = 0.3;
-					
+
 				} else {
 					new Vanish(this, 0.02);
 					delete POV[this.id]
@@ -81,7 +81,7 @@ class Player {
 			default:
 				break;
 		}
-		
+
 	}
 
 	reMp(mp) {
@@ -149,9 +149,9 @@ class Player {
 	doSpell(r) {
 		let spell_id = r.uint8();
 		let target;
-		if (UpdatableObjects.includes(spell_id)){
-				new Spell(this, null, spell_id, r)
-				return
+		if (UpdatableObjects.includes(spell_id)) {
+			new Spell(this, null, spell_id, r)
+			return
 		}
 		else target = r.uint16();
 		if (!hasPlayer(target)) return
@@ -199,22 +199,19 @@ class Player {
 	}
 	draw() {
 		if (performance.now() > this.dateToRestoreOpacity) this.opacity = 1;
-		let AddAngle = 0, startAngle = this.angle;
 		switch (this.class) {
 			case 1:
 				draw_circle(this.x, this.y, this.radius, this.freeze ? 'blue' : this.color)
 				draw_circle(this.x, this.y, this.radius, 'transparent', true, 'black')
 				break;
 			case 2:
-				// draw_circle(this.x, this.y, this.radius, 'transparent', true, '#b3887fc4')
-				ctx.beginPath()
-				ctx.moveTo(this.x + this.radius * Math.cos(startAngle + AddAngle), 
-						   this.y + this.radius * Math.sin(startAngle + AddAngle
-				));
-				for (; AddAngle <= 2 * Math.PI; AddAngle += 2 * Math.PI / 3)
-					ctx.lineTo(this.x + this.radius * Math.cos(startAngle + AddAngle), 
-							   this.y + this.radius * Math.sin(startAngle + AddAngle
-					));
+				ctx.beginPath();
+				ctx.moveTo(this.x + this.radius * Math.cos(this.angle), this.y + this.radius * Math.sin(this.angle));
+				for (var i = 1; i <= 2; i++) {
+					var currentAngle = this.angle + (i * 2 * Math.PI / 3);
+					ctx.lineTo(this.x + this.radius * Math.cos(currentAngle), this.y + this.radius * Math.sin(currentAngle));
+				}
+				ctx.closePath();
 				ctx.fillStyle = 'red'
 				ctx.fill()
 				ctx.stroke();
@@ -307,10 +304,10 @@ class Player {
 		if (typeof name == "number") name = Math.floor(name);
 		if (!this.isMainPlayer) {
 			ctx.fillText(this.name, this.x, this.y - this.radius * 1.7);
-			
-			ctx.drawImage(ImageCache['star.png'], this.x-ctx.measureText(this.name).width/2-30, this.y - this.radius - 30*1.5, 30, 30)
 
-			ctx.fillText(this.level, this.x-ctx.measureText(this.name).width/2-30/2, this.y - this.radius - 27.5);
+			ctx.drawImage(ImageCache['star.png'], this.x - ctx.measureText(this.name).width / 2 - 30, this.y - this.radius - 30 * 1.5, 30, 30)
+
+			ctx.fillText(this.level, this.x - ctx.measureText(this.name).width / 2 - 30 / 2, this.y - this.radius - 27.5);
 
 		}
 		if (this.freeze) ctx.fillText('click me!', this.x, this.y);
@@ -319,8 +316,8 @@ class Player {
 		this.vector = new Vector2({ x: this.x, y: this.y }, { x: this.xto, y: this.yto })
 		this.x += (this.xto - this.x) * 0.2;
 		this.y += (this.yto - this.y) * 0.2;
-		this.angle += (this.angleTo - this.angle) * 1;
-		
+		this.angle += (this.angleTo - this.angle) * 0.99;
+
 		for (let id in this.spellProcesses) {
 			this.spellProcesses[id].update()
 		}

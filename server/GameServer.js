@@ -7,7 +7,6 @@ class GameServer {
         this.server = this;
         this.webSocketServer = new WebSocket.Server({port: port}).on('connection', (ws, req) => {
             new Player(ws, this, req.headers['x-forwarded-for'])
-            l(this.onl)
         })
         this.updateList = [];
         this.port = port;
@@ -18,15 +17,15 @@ class GameServer {
         this.OIDS = 0;
         this.px = 500
         this.freeIDS = [];
-        this.isCollision = true;
-        this.viewRatio = 600;
-        this.isRadialView = false;
+        this.isCollision = false;
+        this.viewRatio = 700;
+        this.isRadialView = true;
         this.SafeZone = {
             x: 300, y: 300,
             size: 200
         }
-        for (let i = 0; i < 8; i++) new Mage(this);
-        for (let i = 0; i < 18; i++) new Hunter(this);
+        // for (let i = 0; i < 8; i++) new Mage(this);
+        // for (let i = 0; i < 18; i++) new Hunter(this);
     }
     getUniqueIdentifier() {
         let id = this.freeIDS.length == 0 ? this.OIDS++ : this.freeIDS.pop();
