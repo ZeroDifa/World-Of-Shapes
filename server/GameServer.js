@@ -1,6 +1,7 @@
 let WebSocket = require('ws');
 const Mage = require("./AiEntities/Mage").Mage
 const Hunter = require("./AiEntities/Hunter").Hunter
+const { readFile } = require("./controllers/helpers");
 class GameServer {
     constructor(port, nameServer) {
         this.nameServer = nameServer;
@@ -12,20 +13,37 @@ class GameServer {
         this.port = port;
         this.clients = {};
         this.objects = [];
-        this.w = 3500;
-        this.h = 3500;
+        this.w = 1000;
+        this.h = 1000;
         this.OIDS = 0;
         this.px = 500
         this.freeIDS = [];
-        this.isCollision = false;
+        this.isCollision = true;
         this.viewRatio = 700;
         this.isRadialView = true;
         this.SafeZone = {
             x: 300, y: 300,
             size: 200
         }
-        // for (let i = 0; i < 8; i++) new Mage(this);
-        // for (let i = 0; i < 18; i++) new Hunter(this);
+    }
+    async connectBots() {
+        let list = JSON.parse(await readFile('usersaves/bots.json'));
+        let b;
+        for (let id in list) {
+            switch (list[id].class) {
+                case 'mage':
+                    b = new Mage(this, id);
+                    await b.readSave(id);
+                    b.spawnEntity();
+                    break;
+                case 'hunter':
+                    b = new Hunter(this, id);
+                    await b.readSave(id);
+                    b.spawnEntity();
+                default:
+                    break;
+            }
+        }
     }
     getUniqueIdentifier() {
         let id = this.freeIDS.length == 0 ? this.OIDS++ : this.freeIDS.pop();
@@ -42,7 +60,13 @@ class GameServer {
         if (this.deltaTime < 0) this.deltaTime = 0;
         this.bootTimeout = setTimeout(() => {this.boot()}, this.deltaTime)
     }
+    disconnectAll() {
+        for (let id in this.clients) {
+            this.disconnect_from_server(this.clients[id]);
+        }
+    }
     stop() {
+        this.disconnectAll();
         clearTimeout(this.bootTimeout)
     }
     update() {
@@ -62,8 +86,9 @@ class GameServer {
     connect_to_gameServer(client) {
         this.clients[client.id] = client
     }
-    disconnect_from_server(client) {
-        client.kill()
+    async disconnect_from_server(client) {
+        client.kill();
+        await client.writeSave();
         this.freeIDS.push(client.id);
         delete this.clients[client.id]
     }
@@ -119,16 +144,16 @@ class GameServer {
             w.uint16(append.length);
             for (let obj of append) {
                 w.uint16(obj.id).uint8(obj.class).uint16(Math.round(obj.x)).uint16(Math.round(obj.y))
-                 .color(obj.color).uint8(obj.radius)
-                 .uint8(obj.name.toString().length).ztstringucs2(obj.name.toString())
-                 .uint16(obj.maxHp).uint16(obj.hp).uint8(obj.level)
-                if (obj == client) w.uint16(obj.xp)
+                 .color(obj.color).uint8(obj.save.radius)
+                 .uint8(obj.save.nickname.toString().length).ztstringucs2(obj.save.nickname.toString())
+                 .uint16(obj.maxHp).uint16(obj.hp).uint8(obj.save.level)
+                if (obj == client) w.uint16(obj.save.xp)
                 switch (obj.class) {
                     case 1:
                         w.uint16(obj.maxMp).uint16(obj.mp)
                         break;
                     case 2:
-                        w.uint16(obj.maxEnergy).uint16(obj.energy)
+                        w.uint16(obj.save.maxEnergy).uint16(obj.energy)
                         break;
                 }
                 w.uint8(obj.Effects.length);

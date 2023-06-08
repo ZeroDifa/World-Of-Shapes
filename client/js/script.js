@@ -132,7 +132,7 @@ function setSpect() {
     isPause = true;
     freeze = false;
     $('#play').css('display', 'block');
-    
+
 }
 function onclose() {
     setSpect();
@@ -144,6 +144,7 @@ function onclose() {
 function HideInterface() {
     document.getElementById('statsInterface').style['display'] = 'none';
     document.getElementById('spells-interface').style['display'] = 'none';
+    document.getElementById('xpbar').style['display'] = 'none';
 }
 function onopen() {
     ws.send(localStorage.token)
@@ -153,6 +154,8 @@ function onopen() {
 
 let OriginPoints = [];
 let viewRatio = 0, isRadialView = false;
+let BASE_EXP = 0, EXP_FACTOR = 0;
+
 function onmessage(event) {
     let data = event.data
     switch (typeof data) {
@@ -162,6 +165,8 @@ function onmessage(event) {
                 case 'server_settings':
                     mp_h = data.h;
                     mp_w = data.w;
+                    BASE_EXP = data.BASE_EXP;
+                    EXP_FACTOR = data.EXP_FACTOR;
                     camera.moveTo(mp_h / 2, mp_w / 2);
                     viewRatio = data.ratio;
                     UpdatableObjects = data.updatableObjects
@@ -283,6 +288,13 @@ function onmessage(event) {
                     break;
                 // level system
                 case 18:
+                    pid = r.uint16()
+                    if (POV.hasOwnProperty(pid)) {
+                        POV[pid].levelUp(r);
+                    }
+                    break;
+                case 19:
+                    POV[MyID].addXp(r);
                     break;
             }
 

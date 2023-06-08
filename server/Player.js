@@ -2,8 +2,8 @@ const { SpellsInfo } = require("./Spell");
 const { Vector2 } = require("./Vector2");
 const fs = require('fs');
 const path = require('path');
-const { verifyToken } = require("./controllers/helpers.js")
-const { checkFileExists, createFile, readFile} = require("./controllers/helpers");
+const { verifyToken } = require("./controllers/helpers.js");
+const config = require("./config/config");
 
 class Player extends Entity {
     constructor(ws, GameServer, ip) {
@@ -30,7 +30,7 @@ class Player extends Entity {
         let w = new Writer();
         // sending player specifications
         w.uint8(1).uint16(this.id);
-        let alsp = this.AllowSpells.slice(1);
+        let alsp = this.save.AllowSpells.slice(1);
         w.uint8(alsp.length)
         alsp.forEach(id => {
             w.uint8(id)
@@ -70,25 +70,21 @@ async function onmessage(e) {
     }
     if (this.waitCharID) {
         let id = e.data;
-        const savePath = 'usersaves/' + this.userId + '.json';
-        if (checkFileExists(savePath)) {
-            console.log('savefile exists!');
-            let list = JSON.parse(await readFile(savePath));
-            if (list[id] !== undefined) {
-                this.save = list[id];
-                this.characterId = id;
-                this.waitCharID = false;
-
-                this.sendMessage(JSON.stringify({
-                    w: this.GameServer.w,
-                    h: this.GameServer.h,
-                    ratio: this.GameServer.viewRatio,
-                    isR: this.GameServer.isRadialView,
-                    updatableObjects: SpellsInfo.updatableObjects,
-                    id: 'server_settings'
-                }))
-                return;
-            }
+        let result = await this.readSave(id);
+        if (result == true) {
+            this.characterId = id;
+            this.waitCharID = false;
+            this.sendMessage(JSON.stringify({
+                w: this.GameServer.w,
+                h: this.GameServer.h,
+                ratio: this.GameServer.viewRatio,
+                isR: this.GameServer.isRadialView,
+                updatableObjects: SpellsInfo.updatableObjects,
+                BASE_EXP: config.BaseExperience,
+                EXP_FACTOR: config.RequiredExperienceFactor,
+                id: 'server_settings'
+            }))
+            return;
         }
         this.ws.close();
         return;

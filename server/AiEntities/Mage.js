@@ -1,14 +1,14 @@
 const { Entity } = require("../Entity");
 
 class Mage extends Entity {
-    constructor(GameServer) {
+    constructor(GameServer, characterId) {
         super(GameServer.w / 2, GameServer.h / 2, GameServer);
         this.type = 'mob';
+        this.userId = 'bots';
+        this.characterId = characterId;
         this.class = 1;
         this.name = this.randomItem(["Merlin", "Gandalf", "Hermione", "Dumbledore", "Morgana", "Elminster", "Medivh", "Saruman", "Willow", "Prospero"]);
-        this.lastTargetChange = performance.now()
-        super.spawnEntity()
-
+        this.lastTargetChange = performance.now();
     }
     randomItem(items) {
         return items[Math.floor(Math.random()*items.length)]

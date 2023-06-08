@@ -19,11 +19,11 @@ class Spell {
 			case 1:
         		this.isBreak =  this.owner.CheckSpell('global') || this.owner.CheckSpell(this.spell_id) || (this.info.isAttackSpell && this.owner.target == null) || (!this.target.isLife) || (!this.owner.isLife) ||
         						(!this.owner.concentrationMode && this.info.isConcentration) || (this.owner.mp-this.mpCost < 0) ||
-        						this.owner.CheckSpell(this.spell_id) || !this.owner.AllowSpells.includes(this.spell_id) || this.owner.spell != null ||
+        						this.owner.CheckSpell(this.spell_id) || !this.owner.save.AllowSpells.includes(this.spell_id) || this.owner.spell != null ||
         						this.owner.mp-this.info.calculateMp(this.owner) < 0;
 				break
 			case 2:
-        		this.isBreak =  this.owner.CheckSpell('global') || this.owner.CheckSpell(this.spell_id) || !this.owner.AllowSpells.includes(this.spell_id) ||
+        		this.isBreak =  this.owner.CheckSpell('global') || this.owner.CheckSpell(this.spell_id) || !this.owner.save.AllowSpells.includes(this.spell_id) ||
 								(this.info.isAttackSpell && this.owner.target == null) || 
 								(!this.target.isLife) || (!this.owner.isLife) || 
 								(this.owner.energy - this.info.calculateEnergy() < 0) || !this.owner.inWithinSight(this.target)
@@ -224,11 +224,10 @@ let SpellsInfo = {
 	    init: function() {
 	    	new Effect(
 	    	function () {
-	    		this.old = this.owner.speed;
 	    		this.owner.speed *= 3.5;
 			},
 	    	function () {
-	    		this.owner.speed = this.old;
+	    		this.owner.speed = this.owner.save.speed;
 				l(this.owner.x, this.target.x)
 	    	},
 	    	this.owner, this.target, 2000, 2)
@@ -366,7 +365,6 @@ let SpellsInfo = {
 						this.owner.setCombatStatus(8000);
 						new Effect(
 							function () {
-								this.old = this.target.speed;
 								this.target.speed *= 0.2;
 								if (this.target.class == 2) {
 									this.oldR = this.target.rotationSpeed
@@ -374,7 +372,7 @@ let SpellsInfo = {
 								}
 							},
 							function () {
-								this.target.speed = this.old;
+								this.target.speed = this.target.save.speed;
 								if (this.target.class == 2) {
 									this.target.rotationSpeed = this.oldR
 								}
@@ -430,7 +428,6 @@ let SpellsInfo = {
 		init: function() {
 			new Effect(
 				function () {
-					this.oldSpeed = this.target.speed;
 					this.oldRotationSpeed = this.target.rotationSpeed;
 					this.target.speed *= 2.5;
 					this.target.rotationSpeed *= 2;
@@ -448,7 +445,7 @@ let SpellsInfo = {
 					)
 				},
 				function () {
-					this.target.speed = this.oldSpeed;
+					this.target.speed = this.target.save.speed;
 					this.target.rotationSpeed = this.oldRotationSpeed;
 					this.target.isInvisibility = false;
 				},

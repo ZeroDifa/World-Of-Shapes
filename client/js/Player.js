@@ -51,6 +51,31 @@ class Player {
 			this.freeze = false;
 		}
 	}
+	calculateRequiredExperience(level) {
+        return Math.floor(BASE_EXP * Math.pow(EXP_FACTOR, level - 1));
+    }
+	levelUp(r) {
+		this.class = r.uint8();
+		this.maxHp = r.uint16();
+		this.hp = r.uint16();
+		this.level = r.uint8();
+		switch (this.class) {
+			case 1:
+				this.maxMp = r.uint16();
+				this.mp = r.uint16();
+				break;
+			case 2:
+				this.maxEnergy = r.uint16()
+				this.energy = r.uint16();
+				break
+		}
+		this.updateInterface();
+		new PushNotify("Уровень " + this.level + " повышен", 5000, 'green')
+	}
+	addXp(r) {
+		this.xp = r.uint16();
+		if (this.isMainPlayer) this.updateInterface();
+	}
 	setDelete(code, r) {
 		switch (code) {
 			case 0:
@@ -67,7 +92,6 @@ class Player {
 				delete POV[this.id]
 				break;
 			case 1:
-
 				if (this.isMainPlayer) {
 					let t = r.uint16();
 					this.dateToRestoreOpacity = performance.now() + t
@@ -176,6 +200,7 @@ class Player {
 		this.spellCooldownBar = document.getElementById('spell');
 		this.personInfo.style['display'] = 'block';
 		this.spellsInterface.style['display'] = 'flex';
+		$('#xpbar').css('display', 'flex');
 	}
 	updateInterface() {
 		let percent = (100 * this.hp) / this.maxHp
@@ -196,6 +221,8 @@ class Player {
 				$('#mp').css('width', `${percent.toFixed(4)}%`)
 				break
 		}
+		percent = (100 * this.xp) / this.calculateRequiredExperience(this.level);
+		$('#xp').css('width', `${percent.toFixed(4)}%`)
 	}
 	draw() {
 		if (performance.now() > this.dateToRestoreOpacity) this.opacity = 1;

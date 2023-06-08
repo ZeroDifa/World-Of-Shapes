@@ -2,14 +2,13 @@ const { Entity } = require("../Entity");
 const { Vector2 } = require("../Vector2");
 
 class Hunter extends Entity {
-    constructor(GameServer) {
+    constructor(GameServer, characterId) {
         super(GameServer.w / 2, GameServer.h / 2, GameServer);
         this.type = 'mob';
+        this.userId = 'bots';
+        this.characterId = characterId;
         this.class = 2;
-        this.name = this.randomItem(["Merlin", "Gandalf", "Hermione", "Dumbledore", "Morgana", "Elminster", "Medivh", "Saruman", "Willow", "Prospero"]);
-        this.lastTargetChange = performance.now()
-        super.spawnEntity()
-
+        this.lastTargetChange = performance.now();
     }
     randomItem(items) {
         return items[Math.floor(Math.random()*items.length)]
@@ -22,7 +21,7 @@ class Hunter extends Entity {
                 this.target = null;
                 return;
             }
-            this.trySpell(this.AllowSpells[1]);
+            this.trySpell(this.save.AllowSpells[1]);
         }
 
         if (performance.now()-this.lastTargetChange < 3000) return

@@ -16,6 +16,10 @@ window.onmousemove = (event) => {
 window.onresize = () => {
     canvas.width = w = canvas.clientWidth;
     canvas.height = h = canvas.clientHeight;
+    if (player) {
+        player.x = w/2
+        player.y = h/2
+    }
 }
 
 function setPlayer(chrs, id) {

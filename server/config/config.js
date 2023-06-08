@@ -10,6 +10,7 @@ module.exports = {
 			protection: 0.9,
             speed: 6,
             radius: 30,
+            damageRate: 1,
 
 			intelligence: 30,
 			manaRegenAtRest: 5,
@@ -21,17 +22,20 @@ module.exports = {
             rotationEasing: 0,
 
             level: 1,
-            xp: 0
+            xp: 0,
+
+            kills: 0
         },
         2: {
             description: 'Класс охотник. Хорошая защита, неплохой урон. Плохая подвижность, но большой запас жизни.',
 
 
             AllowSpells: ['global', 4, 5, 6, 7],
-            stamina: 90,
+            stamina: 55,
 			protection: 0.6,
             speed: 4,
             radius: 50,
+            damageRate: 1,
 
 			intelligence: 0,
 			manaRegenAtRest: 0,
@@ -43,7 +47,13 @@ module.exports = {
             rotationEasing: 0.1,
 
             level: 1,
-            xp: 0
+            xp: 0,
+
+            kills: 0
         }
-    }
+    },
+    RequiredExperienceFactor: 1.5,
+    BaseExperience: 300,
+    ExperienceForKillFactor: 0.25,
+    BaseExperienceForKill: 150,
 };

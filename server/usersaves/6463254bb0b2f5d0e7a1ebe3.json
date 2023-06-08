@@ -1,0 +1,29 @@
+{
+    "1889b4752641149": {
+        "description": "Класс охотник. Хорошая защита, неплохой урон. Плохая подвижность, но большой запас жизни.",
+        "AllowSpells": [
+            "global",
+            4,
+            5,
+            6,
+            7
+        ],
+        "stamina": 55,
+        "protection": 0.6,
+        "speed": 4,
+        "radius": 50,
+        "damageRate": 1,
+        "intelligence": 0,
+        "manaRegenAtRest": 0,
+        "manaRegenAtCombat": 0,
+        "spellDamagePower": 0,
+        "maxEnergy": 100,
+        "energyRegen": 16,
+        "rotationEasing": 0.1,
+        "level": 1,
+        "xp": 0,
+        "kills": 0,
+        "nickname": "sdg",
+        "class": "hunter"
+    }
+}

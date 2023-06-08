@@ -28,14 +28,25 @@ app.listen(8080, function(){
     console.log("Server running on localhost:" + 8080);
 });
 
-let GameServer = require('./GameServer.js').GameServer;
-new GameServer(1337, 'server one').boot()
+const GameServer = require('./GameServer.js').GameServer;
+const Servers = {};
+
+Servers[1337] = new GameServer(1337, 'server one');
+
+
+for (let port in Servers) {
+    Servers[port].boot();
+    Servers[port].connectBots();
+}
+
+
+
 
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', function (text) {
     try {
-        eval(text.trim())
+        l(eval(text.trim()))
     } catch (e) {
         l(e)
     };
