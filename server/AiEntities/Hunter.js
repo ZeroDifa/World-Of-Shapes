@@ -42,8 +42,8 @@ class Hunter extends Entity {
         super.move()
         if (this.spell == null) this.findTarget()
     }
-    kill() {
-        super.kill()
+    kill(attacker) {
+        super.kill(attacker)
         setTimeout(() => { super.spawnEntity() }, 1000)
     }
 }

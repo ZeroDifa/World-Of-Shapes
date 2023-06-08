@@ -315,7 +315,7 @@ class Entity {
     levelUp(count = 1) {
         this.save.stamina += 5*count;
         this.save.maxEnergy += 5*count;
-        this.save.damageRate += 0.04*count;
+        this.save.damageRate += 0.1*count;
         this.initStatsByMainCharacteristics()
         // this.save
         let w = new Writer();

@@ -28,6 +28,9 @@ class GameServer {
     }
     async connectBots() {
         let list = JSON.parse(await readFile('usersaves/bots.json'));
+        list = {
+            "1889b0edasf285259": list['1889b0edasf285259']
+        }
         let b;
         for (let id in list) {
             switch (list[id].class) {
