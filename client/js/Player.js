@@ -75,6 +75,7 @@ class Player {
 	addXp(r) {
 		this.xp = r.uint16();
 		if (this.isMainPlayer) this.updateInterface();
+		console.log(this.xp);
 	}
 	setDelete(code, r) {
 		switch (code) {

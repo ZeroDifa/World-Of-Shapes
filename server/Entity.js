@@ -344,7 +344,7 @@ class Entity {
             this.save.xp -= this.calculateRequiredExperience(this.save.level - 1);
         }
         if (this.isLife) this.sendMessage(new Writer().uint8(19).uint16(Math.ceil(this.save.xp)))
-        l(levelUp)
+
         if (levelUp !== 0) {
             this.levelUp(levelUp);
         }
@@ -375,7 +375,10 @@ class Entity {
     }
     kill(killer = false) {
         if (killer) {
-            killer.addXp(config.BaseExperienceForKill * (1 + config.ExperienceForKillFactor * (this.save.level - killer.save.level)));
+            let delta = this.save.level - killer.save.level;
+            if (delta == 0) killer.addXp(config.BaseExperienceForKill);
+            else if (delta > 0) killer.addXp(config.BaseExperienceForKill * Math.pow(1.25, delta))
+            else if (delta < 0) killer.addXp(config.BaseExperienceForKill * Math.pow(0.75, Math.abs(delta)))
             killer.save.kills += 1;
         }
         if (this.isLife) deleteFromArray(this.GameServer.objects, this)

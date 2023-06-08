@@ -156,6 +156,10 @@ let OriginPoints = [];
 let viewRatio = 0, isRadialView = false;
 let BASE_EXP = 0, EXP_FACTOR = 0;
 
+function fillTop(data) {
+        
+}
+
 function onmessage(event) {
     let data = event.data
     switch (typeof data) {
@@ -174,7 +178,8 @@ function onmessage(event) {
                     OriginPoints = [];
                     for (let i = 0; i < (mp_h * mp_w) / 15000; i++) OriginPoints.push(new Point())
                     break
-                case 'target_me':
+                case 'top':
+                    fillTop(data.top)
                     break
             }
             break

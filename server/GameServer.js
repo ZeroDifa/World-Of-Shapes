@@ -13,8 +13,8 @@ class GameServer {
         this.port = port;
         this.clients = {};
         this.objects = [];
-        this.w = 1000;
-        this.h = 1000;
+        this.w = 3500;
+        this.h = 3500;
         this.OIDS = 0;
         this.px = 500
         this.freeIDS = [];
@@ -25,12 +25,14 @@ class GameServer {
             x: 300, y: 300,
             size: 200
         }
+        this.top = {};
+        this.timeToSendTop = performance.now();
     }
     async connectBots() {
         let list = JSON.parse(await readFile('usersaves/bots.json'));
-        list = {
-            "1889b0edasf285259": list['1889b0edasf285259']
-        }
+        // list = {
+            // "1889b0edasf285259": list['1889b0edasf285259']
+        // }
         let b;
         for (let id in list) {
             switch (list[id].class) {
@@ -72,7 +74,36 @@ class GameServer {
         this.disconnectAll();
         clearTimeout(this.bootTimeout)
     }
+    async sendTop() {
+        let clients = [];
+        for (let id in this.clients) {
+            let c = this.clients[id];
+            clients.push({
+                level: c.save.level,
+                kills: c.save.kills,
+                name: c.save.nickname,
+                class: c.save.class
+            })
+        }
+        clients.sort(function(a, b) {
+            return b.kills - a.kills;
+        });
+        for (let id in this.clients) {
+            let c = this.clients[id];
+            c.sendMessage(JSON.stringify(
+                {
+                    top: clients.slice(0, 10),
+                    id: 'top'
+                }
+            ))
+        }
+          
+    }
     update() {
+        if (performance.now() - this.timeToSendTop > 1000) {
+            this.timeToSendTop = performance.now();
+            this.sendTop();
+        }
         for (let obj of this.objects) {
             obj.move()
         }

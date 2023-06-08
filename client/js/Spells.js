@@ -25,13 +25,11 @@ class Spell {
 window.SpellsInfo = {
 	1: {
 	    init: function() {
-			l(this)
 	    	let vector = new Vector2(this.owner, this.target);
 	    	let _ = ((this.owner.radius)*100)/ vector.distance / 100;
 	    	this.x = this.owner.x + (vector.dx * _);
 	    	this.y = this.owner.y + (vector.dy * _);
 			this.vector = new Vector2({x: this.x,y: this.y}, {x: this.xto, y: this.yto})
-			l(this.vector)
 			this.fire = new Fire(15, 30, this, 1, 0, 150, 255, 5, false, function () {
 	    		this.particles.push({
 	    			x: this.owner.x + rnd([-this.range, this.range]), 
