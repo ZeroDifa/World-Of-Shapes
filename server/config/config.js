@@ -52,7 +52,7 @@ module.exports = {
             kills: 0
         }
     },
-    RequiredExperienceFactor: 1.5,
+    RequiredExperienceFactor: 1.25,
     BaseExperience: 300,
     ExperienceForKillFactor: 0.25,
     BaseExperienceForKill: 150,

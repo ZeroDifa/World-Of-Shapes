@@ -157,7 +157,12 @@ let viewRatio = 0, isRadialView = false;
 let BASE_EXP = 0, EXP_FACTOR = 0;
 
 function fillTop(data) {
-        
+    let top = $(".top-value");
+    let overlays = $(".text-overlay");
+    for (let i = 0; i < 10; i++) {
+        $(".top-value")[i].style['display'] = 'flex'
+        overlays[i].innerHTML = `<span style="color: black;">${data[i].level}</span>${data[i].name} Kills: ${data[i].kills} (${data[i].class})`
+    }
 }
 
 function onmessage(event) {
