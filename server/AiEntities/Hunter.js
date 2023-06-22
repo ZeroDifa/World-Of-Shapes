@@ -9,6 +9,8 @@ class Hunter extends Entity {
         this.characterId = characterId;
         this.class = 2;
         this.lastTargetChange = performance.now();
+        this.timeToChengeTarget = rnd([7000, 12000]);
+        
     }
     randomItem(items) {
         return items[Math.floor(Math.random()*items.length)]
@@ -16,7 +18,7 @@ class Hunter extends Entity {
     findTarget() {
         if (this.target !== null && new Vector2(this, this.target).distance > 150 && !this.isInvisibility) {
             if (this.hpPercent < 50) {
-                this.trySpell(3);
+                this.trySpell(6);
                 this.aim.p = new Point(rnd([0, this.GameServer.w]), rnd([0, this.GameServer.h]), this.GameServer)
                 this.target = null;
                 return;
@@ -24,7 +26,7 @@ class Hunter extends Entity {
             this.trySpell(this.save.AllowSpells[1]);
         }
 
-        if (performance.now()-this.lastTargetChange < 3000) return
+        if (performance.now()-this.lastTargetChange < this.timeToChengeTarget) return
         this.lastTargetChange = performance.now();
         for (let obj of this.GameServer.objects) {
             if (!this.isOnViewPort(obj) || this.isInvisibility || obj.isInvisibility || 
@@ -32,8 +34,6 @@ class Hunter extends Entity {
                 this.CheckSpell('global') || obj == this || new Vector2(this, obj).distance < 300) continue
             this.target = obj;
             this.aim.p = obj;
-            
-            
             return
         }
         this.aim.p = new Point(rnd([0, this.GameServer.w]), rnd([0, this.GameServer.h]), this.GameServer)

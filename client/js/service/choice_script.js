@@ -194,13 +194,13 @@ class Player {
     }
     draw_name(align = 'center', base = 'middle') {
         ctx.beginPath();
-        ctx.font = this.radius * 0.5 + 'px Verdana';
+        ctx.font = (this.radius-20) * 0.5 + 'px Verdana';
         ctx.fillStyle = 'gray';
         ctx.textAlign = align;
         ctx.textBaseline = base;
         if (typeof name == "number") name = Math.floor(name);
         if (!this.isMainPlayer) {
-            ctx.fillText(this.name, this.x, this.y - this.radius * 1.7);
+            ctx.fillText(this.name, this.x, this.y - this.radius * 1.55);
 
             // ctx.drawImage(ImageCache['star.png'], this.x-ctx.measureText(this.name).width/2-30, this.y - this.radius - 30*1.5, 30, 30)
 

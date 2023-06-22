@@ -23,6 +23,7 @@ let canvas = document.getElementById('canvas'),
     cords = document.getElementById('myCords'),
     name = 'the no-nickname';
 
+// let wsIP = 'wss://061a-5-139-32-75.ngrok-free.app',
 let wsIP = 'ws://localhost:1337',
     ws = null;
 function open() {
@@ -497,8 +498,8 @@ function main() {
     ctx.scale(camera.scale, camera.scale);
     ctx.translate(-camera.x, -camera.y);
     update()
-    // if (focus) render()
-    render()
+    if (focus) render()
+    // render()
     ctx.restore();
     result_fps++;
     let fut = performance.now() - now;

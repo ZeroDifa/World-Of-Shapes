@@ -16,7 +16,7 @@ class Player {
 		this.maxHp = r.uint16();
 		this.hp = r.uint16();
 		this.level = r.uint8();
-		if (this.isMainPlayer) this.xp = r.uint16();
+		if (this.isMainPlayer) this.xp = r.uint32();
 		// l(this.level, this.xp)
 		this.opacity = 1;
 		this.dateToRestoreOpacity = performance.now() - 9999999
@@ -69,11 +69,13 @@ class Player {
 				this.energy = r.uint16();
 				break
 		}
-		this.updateInterface();
-		new PushNotify("Уровень " + this.level + " повышен", 5000, 'green')
+		if (this.isMainPlayer) {
+			this.updateInterface();
+			new PushNotify("Уровень " + this.level + " повышен", 5000, 'green')
+		}
 	}
 	addXp(r) {
-		this.xp = r.uint16();
+		this.xp = r.uint32();
 		if (this.isMainPlayer) this.updateInterface();
 		console.log(this.xp);
 	}
@@ -344,7 +346,7 @@ class Player {
 		this.vector = new Vector2({ x: this.x, y: this.y }, { x: this.xto, y: this.yto })
 		this.x += (this.xto - this.x) * 0.2;
 		this.y += (this.yto - this.y) * 0.2;
-		this.angle += (this.angleTo - this.angle) * 0.99;
+		this.angle += (this.angleTo - this.angle) * 1;
 
 		for (let id in this.spellProcesses) {
 			this.spellProcesses[id].update()

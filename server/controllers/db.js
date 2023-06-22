@@ -15,7 +15,6 @@ class DataBase {
     async connect() {
         try {
             this.client = await MongoClient.connect(this.uri, this.options);
-            console.log('Connected to MongoDB!');
             this.db = this.client.db();
         } catch (err) {
             console.log('Error connecting to MongoDB', err);
@@ -25,7 +24,6 @@ class DataBase {
     async close() {
         try {
             await this.client.close();
-            console.log('Disconnected from MongoDB!');
         } catch (err) {
             console.log('Error disconnecting from MongoDB', err);
         }

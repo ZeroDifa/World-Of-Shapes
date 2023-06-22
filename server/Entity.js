@@ -179,25 +179,23 @@ class Entity {
         let s = this.GameServer.SafeZone.size;
         this.GameServer.objects.push(this);
         this.isLife = true;
-        this.spawnTime = performance.now()
+        this.timeToRestore = performance.now()
     }
     move() {
         if (this.isLife && this.class == 1) {
-            let timeLeft = performance.now() - this.spawnTime;
+            let timeLeft = performance.now() - this.timeToRestore;
             if (timeLeft > 3000) {
                 let secondsCount = Math.floor(timeLeft / 1000);
-                this.spawnTime += secondsCount * 1000;
+                this.timeToRestore += secondsCount * 1000;
                 this.reMp(!this.isCombatStatus ? secondsCount * this.save.manaRegenAtRest : secondsCount * this.save.manaRegenAtCombat)
             }
         } else if (this.isLife && this.class == 2) {
-            let timeLeft = performance.now() - this.spawnTime;
+            let timeLeft = performance.now() - this.timeToRestore;
             if (timeLeft > 250) {
-                let secondsCount = Math.floor(timeLeft / 250);
-                this.spawnTime += secondsCount * 250;
-                this.reEnergy(secondsCount * this.save.energyRegen / 4)
+                this.reEnergy((this.save.energyRegen / 4) * Math.floor(timeLeft/250))
+                this.timeToRestore = performance.now();
             }
         }
-
         if (!this.isLife) {
             l('is not life')
             return
@@ -239,13 +237,11 @@ class Entity {
                 let c = this.ws != null ? this.objectsInVision[id] : this.GameServer.clients[id]
                 if (c.type == 'spell') continue
                 if (c == this || !this.isOnViewPort(c)) continue
-                let tp_arr = new Vector2(this, c);
-                let dx = tp_arr.dx;
-                let dy = tp_arr.dy;
-                let d = tp_arr.distance;
-                if (d < (c.radius + this.radius)) {
-                    let nx = dx / d, ny = dy / d;
-                    let s = this.radius + c.radius - d;
+                let v = new Vector2(this, c);
+                if (v.distance < (c.radius + this.radius)) {
+                    let s = this.radius + c.radius - v.distance;
+                    v.normallize()
+                    let nx = v.dx, ny = v.dy;
                     this.x -= nx * s / 2;
                     this.y -= ny * s / 2;
                     c.x += nx * s / 2;
@@ -316,6 +312,7 @@ class Entity {
         this.save.stamina += 5*count;
         this.save.maxEnergy += 5*count;
         this.save.damageRate += 0.1*count;
+        this.save.protection *= 0.99;
         this.initStatsByMainCharacteristics()
         // this.save
         let w = new Writer();
@@ -343,7 +340,7 @@ class Entity {
             this.save.level++;
             this.save.xp -= this.calculateRequiredExperience(this.save.level - 1);
         }
-        if (this.isLife) this.sendMessage(new Writer().uint8(19).uint16(Math.ceil(this.save.xp)))
+        if (this.isLife && this.ws !== null) this.sendMessage(new Writer().uint8(19).uint32(Math.ceil(this.save.xp)))
 
         if (levelUp !== 0) {
             this.levelUp(levelUp);
@@ -377,11 +374,12 @@ class Entity {
         if (killer) {
             let delta = this.save.level - killer.save.level;
             if (delta == 0) killer.addXp(config.BaseExperienceForKill);
-            else if (delta > 0) killer.addXp(config.BaseExperienceForKill * Math.pow(1.25, delta))
+            else if (delta > 0) killer.addXp(Math.min(config.BaseExperienceForKill * Math.pow(1.25, delta), 1000))
             else if (delta < 0) killer.addXp(config.BaseExperienceForKill * Math.pow(0.75, Math.abs(delta)))
             killer.save.kills += 1;
         }
         if (this.isLife) deleteFromArray(this.GameServer.objects, this)
+        this.isInvisibility = false;
         this.isLife = false;
     }
 }

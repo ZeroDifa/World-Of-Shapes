@@ -1,5 +1,5 @@
 {
-    "1889b4752641149": {
+    "188aa8e59ba1a9d": {
         "description": "Класс охотник. Хорошая защита, неплохой урон. Плохая подвижность, но большой запас жизни.",
         "AllowSpells": [
             "global",
@@ -8,25 +8,25 @@
             6,
             7
         ],
-        "stamina": 550,
-        "protection": 0.47616857018619324,
+        "stamina": 55,
+        "protection": 0.6,
         "speed": 4,
         "radius": 50,
-        "damageRate": 20.89999999999999,
+        "damageRate": 1,
         "intelligence": 0,
         "manaRegenAtRest": 0,
         "manaRegenAtCombat": 0,
         "spellDamagePower": 0,
-        "maxEnergy": 595,
+        "maxEnergy": 100,
         "energyRegen": 16,
         "rotationEasing": 0.1,
-        "level": 100,
-        "xp": 47725824.455796674,
-        "kills": 344,
-        "nickname": "Player",
+        "level": 1,
+        "xp": 0,
+        "kills": 0,
+        "nickname": "12322",
         "class": "hunter"
     },
-    "188d3f09c111a72": {
+    "188aa915e8b174b": {
         "description": "Класс маг. Слабая живучесть, компенсируемая хорошей мобильностью и малыми габаритами. Имеет уникальную механику \"концентрация\", позволяющая подготавливать мощные атаки. ",
         "AllowSpells": [
             "global",
@@ -35,22 +35,22 @@
             3,
             6
         ],
-        "stamina": 470,
-        "protection": 0.7740525191771597,
+        "stamina": 45,
+        "protection": 0.9,
         "speed": 6,
         "radius": 30,
-        "damageRate": 9.499999999999998,
-        "intelligence": 100,
-        "manaRegenAtRest": 200,
+        "damageRate": 1,
+        "intelligence": 30,
+        "manaRegenAtRest": 5,
         "manaRegenAtCombat": 1,
-        "spellDamagePower": 1000,
-        "maxEnergy": 425,
+        "spellDamagePower": 30,
+        "maxEnergy": 0,
         "energyRegen": 0,
         "rotationEasing": 0,
-        "level": 86,
-        "xp": 35535475.40788957,
-        "kills": 131,
-        "nickname": "Player",
+        "level": 1,
+        "xp": 0,
+        "kills": 0,
+        "nickname": "12312321",
         "class": "mage"
     }
 }

@@ -9,12 +9,13 @@ class Mage extends Entity {
         this.class = 1;
         this.name = this.randomItem(["Merlin", "Gandalf", "Hermione", "Dumbledore", "Morgana", "Elminster", "Medivh", "Saruman", "Willow", "Prospero"]);
         this.lastTargetChange = performance.now();
+        this.timeToChengeTarget = rnd([1000, 10000]);
     }
     randomItem(items) {
         return items[Math.floor(Math.random()*items.length)]
     }
     findTarget() {
-        if (performance.now()-this.lastTargetChange < 3000) return
+        if (performance.now()-this.lastTargetChange < 1000) return
         this.lastTargetChange = performance.now();
         for (let obj of this.GameServer.objects) {
             if (!this.isOnViewPort(obj) || obj.isInvisibility || obj.type == 'spell' || this.spell != null || this.processingSpell || this.CheckSpell('global') || obj == this) continue

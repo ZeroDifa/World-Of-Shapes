@@ -188,7 +188,7 @@ let SpellsInfo = {
 			new Effect(
 				function () {},
 				function () {},
-				this.owner, this.target, 2000, 1, 1000,
+				this.owner, this.target, 3000, 1, 1000,
 				function () {
 					this.target.doDamage(rnd([-20, -10]), this.owner)
 				}
@@ -205,7 +205,7 @@ let SpellsInfo = {
 					for (let id in this.GameServer.clients) {
 						let obj = this.GameServer.clients[id]
 						if ((new Vector2(this.owner, obj)).distance > this.owner.radius*5-obj.radius || obj == this.owner || obj.type == 'spell' || !obj.isLife) continue
-						obj.doDamage(rnd([-9, -3]), this.owner)
+						obj.doDamage(rnd([-90, -30]), this.owner)
 					}
 				});
 			}
@@ -230,7 +230,7 @@ let SpellsInfo = {
 	    		this.owner.speed = this.owner.save.speed;
 				l(this.owner.x, this.target.x)
 	    	},
-	    	this.owner, this.target, 2000, 2)
+	    	this.owner, this.target, 3000, 2)
 	    }
 	},
 	3: {

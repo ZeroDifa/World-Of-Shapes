@@ -82,7 +82,6 @@ exports.login = async (req, res) => {
 }
 
 exports.createCharacter = async (req, res) => {
-    l(req.body)
     if ([req.body.nickname, req.body.class].includes(undefined)) {
         return res.status(400).send({  "error": "Неверный формат данных" })
     }

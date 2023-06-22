@@ -46,11 +46,11 @@ router.get('/createmenu', authWithRedirect, (req, res) => {
 })
 
 router.get('/signin', (req, res) => {
-    res.sendFile(path.resolve('./htmls/signin.html'))
+    res.sendFile(path.resolve('./htmls/sign.html'))
 })
 
 router.get('/signup', (req, res) => {
-    res.sendFile(path.resolve('./htmls/signup.html'))
+    res.sendFile(path.resolve('./htmls/sign.html'))
 })
 
 router.get('*', (req, res) => {

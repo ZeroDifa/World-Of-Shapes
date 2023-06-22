@@ -2,21 +2,22 @@ let WebSocket = require('ws');
 const Mage = require("./AiEntities/Mage").Mage
 const Hunter = require("./AiEntities/Hunter").Hunter
 const { readFile } = require("./controllers/helpers");
+
 class GameServer {
     constructor(port, nameServer) {
         this.nameServer = nameServer;
+        this.port = port;
         this.server = this;
         this.webSocketServer = new WebSocket.Server({port: port}).on('connection', (ws, req) => {
             new Player(ws, this, req.headers['x-forwarded-for'])
         })
         this.updateList = [];
-        this.port = port;
         this.clients = {};
         this.objects = [];
         this.w = 3500;
         this.h = 3500;
         this.OIDS = 0;
-        this.px = 500
+        this.px = 500;
         this.freeIDS = [];
         this.isCollision = true;
         this.viewRatio = 700;
@@ -30,9 +31,6 @@ class GameServer {
     }
     async connectBots() {
         let list = JSON.parse(await readFile('usersaves/bots.json'));
-        // list = {
-            // "1889b0edasf285259": list['1889b0edasf285259']
-        // }
         let b;
         for (let id in list) {
             switch (list[id].class) {
@@ -58,10 +56,10 @@ class GameServer {
         return this.clients.hasOwnProperty(id)
     }
     boot() {
-        let now = performance.now()
+        let before = performance.now()
         this.update()
-        let fut = performance.now() - now;
-        this.deltaTime = 1000/60 - fut;
+        let after = performance.now() - before;
+        this.deltaTime = 1000/60 - after;
         if (this.deltaTime < 0) this.deltaTime = 0;
         this.bootTimeout = setTimeout(() => {this.boot()}, this.deltaTime)
     }
@@ -78,12 +76,17 @@ class GameServer {
         let clients = [];
         for (let id in this.clients) {
             let c = this.clients[id];
+            if (c.waitToken || c.waitCharID) {
+                console.log('unauth now');
+                continue
+            };
             clients.push({
                 level: c.save.level,
                 kills: c.save.kills,
                 name: c.save.nickname,
                 class: c.save.class
             })
+            
         }
         clients.sort(function(a, b) {
             return b.kills - a.kills;
@@ -104,12 +107,9 @@ class GameServer {
             this.timeToSendTop = performance.now();
             this.sendTop();
         }
-        for (let obj of this.objects) {
-            obj.move()
-        }
-        for (let obj of this.updateList) {
-            obj.update();
-        }
+        for (let obj of this.objects) obj.move();
+        for (let obj of this.updateList) obj.update();
+
         for (let id in this.clients) {
             let client = this.clients[id]
             if (client.ws == null) continue
@@ -181,7 +181,7 @@ class GameServer {
                  .color(obj.color).uint8(obj.save.radius)
                  .uint8(obj.save.nickname.toString().length).ztstringucs2(obj.save.nickname.toString())
                  .uint16(obj.maxHp).uint16(obj.hp).uint8(obj.save.level)
-                if (obj == client) w.uint16(obj.save.xp)
+                if (obj == client) w.uint32(Math.ceil(obj.save.xp))
                 switch (obj.class) {
                     case 1:
                         w.uint16(obj.maxMp).uint16(obj.mp)
